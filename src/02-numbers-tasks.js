@@ -51,9 +51,19 @@ function getCicleCircumference(radius) {
  *  10, 0  => 5
  *  -3, 3  => 0
  */
-function getAverage(/* value1, value2 */) {
+function getAverage(value1, value2) {
   // return Math.round((value1 + value2) / 2);
-  throw new Error('Not implemented');
+  let result;
+  if (value2 < 0 || value2 < -10000) {
+    if (value2 < 0) {
+      result = ((value1 - value2 * -1) / 2 + value2) * -1;
+    }
+  } else if (value1 > value2) {
+    result = (value1 - value2) / 2 + value2;
+  } else {
+    result = (value2 - (value1)) / 2 + value1;
+  }
+  return result;
 }
 
 /**
@@ -113,8 +123,11 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (0,1)     => 0
  *   (0,1) (1,2)     => 0
  */
-function getAngleBetweenVectors(/* x1, y1, x2, y2 */) {
-  throw new Error('Not implemented');
+function getAngleBetweenVectors(x1, y1, x2, y2) {
+  const vectorProduct = x1 * x2 + y1 * y2;
+  const moduleA = Math.sqrt(x1 * x1 + y1 * y1);
+  const moduleB = Math.sqrt(x2 * x2 + y2 * y2);
+  return Math.acos(vectorProduct / (moduleA * moduleB));
 }
 
 /**
@@ -230,8 +243,13 @@ function isPrime(n) {
  *   toNumber(42, 0) => 42
  *   toNumber(new Number(42), 0) => 42
  */
-function toNumber(/* value, def */) {
-  throw new Error('Not implemented');
+function toNumber(value, def) {
+  let result;
+  result = Number(value);
+  if (Number.isNaN(result)) {
+    result = def;
+  }
+  return result;
 }
 
 module.exports = {
