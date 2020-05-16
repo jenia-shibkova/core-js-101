@@ -1,6 +1,6 @@
 /* *********************************************************************************************
  *                                                                                             *
- * Plese read the following tutorial before implementing tasks:                                *
+ * Please read the following tutorial before implementing tasks:                                *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions                     *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function   *
  * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/arguments       *
@@ -23,8 +23,11 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  function x(...args) {
+    return f(g(...args));
+  }
+  return x;
 }
 
 
@@ -62,8 +65,12 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(...args) {
+  if (arguments.length === 0) {
+    return null;
+  }
+  const arr = args.reverse();
+  return (x) => arr.reduce((accum, current, ind) => accum + current * (x ** ind));
 }
 
 
@@ -107,8 +114,18 @@ function memoize(func) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return () => {
+    let counter = 0;
+    while (counter < attempts) {
+      try {
+        return func();
+      } catch (e) {
+        counter += 1;
+      }
+    }
+    return new Error();
+  };
 }
 
 
@@ -116,7 +133,7 @@ function retry(/* func, attempts */) {
  * Returns the logging wrapper for the specified method,
  * Logger has to log the start and end of calling the specified function.
  * Logger has to log the arguments of invoked function.
- * The fromat of output log is:
+ * The format of output log is:
  * <function name>(<arg1>, <arg2>,...,<argN>) starts
  * <function name>(<arg1>, <arg2>,...,<argN>) ends
  *
@@ -135,8 +152,17 @@ function retry(/* func, attempts */) {
  * cos(3.141592653589793) ends
  *
  */
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...args) => {
+    let str = JSON.stringify(args);
+    str = str.slice(1, -1);
+    str = `${func.name}(${str})`;
+    logFunc(`${str} starts`);
+    const result = func.apply(this, args);
+    logFunc(`${str} ends`);
+
+    return result;
+  };
 }
 
 
@@ -153,8 +179,8 @@ function logger(/* func, logFunc */) {
  *   partialUsingArguments(fn, 'a','b','c')('d') => 'abcd'
  *   partialUsingArguments(fn, 'a','b','c','d')() => 'abcd'
  */
-function partialUsingArguments(/* fn, ...args1 */) {
-  throw new Error('Not implemented');
+function partialUsingArguments(fn, ...args1) {
+  return (...args) => fn(...args1.concat(args));
 }
 
 
