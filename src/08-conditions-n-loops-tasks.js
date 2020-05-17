@@ -312,8 +312,22 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
+function isCreditCardNumber(ccn) {
+  const digits = String(ccn);
+  const { length } = digits;
+  let sum = 0;
+  let even = false;
+
+  for (let i = length - 1; i >= 0; i -= 1) {
+    const dig = parseInt(digits[i], 10);
+    let doubled = dig * 2;
+
+    if (doubled > 9) doubled -= 9;
+    sum += (even) ? doubled : dig;
+    even = !even;
+  }
+
+  return sum % 10 === 0;
 }
 
 /**
@@ -451,8 +465,37 @@ function toNaryString(num, n) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/webalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  let result = '';
+  let common = '';
+  let index = null;
+
+  for (let i = 0; i < pathes[0].length; i += 1) {
+    let count = 0;
+
+    for (let j = 1; j < pathes.length; j += 1) {
+      if (pathes[0][i] === pathes[j][i]) {
+        count += 1;
+        if (pathes[0][i] === '/') {
+          index = i;
+        }
+      }
+    }
+
+    if (count === pathes.length - 1) {
+      common += pathes[0][i];
+    } else {
+      break;
+    }
+  }
+
+  if (common === '' || common[common.length - 1] === '/') {
+    result += common;
+  } else if (index !== null) {
+    result = common.substring(0, index + 1);
+  }
+
+  return result;
 }
 
 
@@ -474,8 +517,21 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  let result = Array.from({ length: m1.length }, () => []);
+  result = result.map(() => Array.from({ length: m2[0].length }, () => 0));
+
+  for (let i = 0; i < m1.length; i += 1) {
+    for (let j = 0; j < m2[0].length; j += 1) {
+      let sum = 0;
+      for (let k = 0; k < m1[0].length; k += 1) {
+        sum += m1[i][k] * m2[k][j];
+        result[i][j] = sum;
+      }
+    }
+  }
+
+  return result;
 }
 
 
